@@ -20,8 +20,8 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // Basic phone validation on server side as well
-        const phoneRegex = /^(\+91[\-\s]?)?[6789]\d{9}$/;
+        // Phone must be exactly 10 digits (Indian mobile, without country code)
+        const phoneRegex = /^[6-9]\d{9}$/;
         if (!phoneRegex.test(phone)) {
             return NextResponse.json({ error: 'Invalid phone number format' }, { status: 400 });
         }

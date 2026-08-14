@@ -23,7 +23,9 @@ export default function RunningScreen({ testCode, startTime, durationHours, prob
 
     return (
         <main className="flex flex-col h-screen text-gray-900 bg-gray-50">
-            <div className="bg-white shadow p-4 z-10 flex flex-col md:flex-row items-center justify-between">
+            <div className="bg-white shadow p-4 z-10 flex flex-col md:flex-row items-center justify-between gap-3 border-t-4 border-brand">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/fenmo-logo.svg" alt="Fenmo" className="h-8 w-auto" />
                 <Countdown
                     startTime={startTime}
                     durationHours={durationHours}
