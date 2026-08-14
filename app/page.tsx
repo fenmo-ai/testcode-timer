@@ -42,15 +42,17 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-50 text-gray-900">
       <div className="z-10 max-w-md w-full items-center justify-between font-mono text-sm">
-        <h1 className="text-4xl font-bold text-center mb-8">{process.env.NEXT_PUBLIC_TITLE || 'TestCode Timer'}</h1>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/fenmo-logo.svg" alt="Fenmo" className="h-11 w-auto mx-auto mb-6" />
+        <h1 className="text-3xl font-bold text-center mb-8">{process.env.NEXT_PUBLIC_TITLE || 'TestCode Timer'}</h1>
 
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 border-t-4 border-brand">
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="testCode">
               Enter your TestCode
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
               id="testCode"
               type="text"
               placeholder="TEST123"
@@ -62,7 +64,7 @@ export default function Home() {
           </div>
           <div className="flex items-center justify-center">
             <button
-              className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full disabled:opacity-50"
+              className="bg-brand hover:bg-brand-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-4 focus:ring-brand/30 w-full disabled:opacity-50 transition-colors"
               type="submit"
               disabled={loading}
             >

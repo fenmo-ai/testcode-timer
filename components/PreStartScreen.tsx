@@ -38,7 +38,9 @@ export default function PreStartScreen({ testCode, durationHours }: PreStartScre
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-center p-24 text-gray-900">
-            <div className="max-w-xl w-full bg-white shadow-lg rounded-lg p-8">
+            <div className="max-w-xl w-full bg-white shadow-lg rounded-lg p-8 border-t-4 border-brand">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/fenmo-logo.svg" alt="Fenmo" className="h-9 w-auto mx-auto mb-6" />
                 <h1 className="text-3xl font-bold mb-6 text-center">Test Readiness</h1>
 
                 <div className="prose mb-8">
@@ -55,7 +57,7 @@ export default function PreStartScreen({ testCode, durationHours }: PreStartScre
                     <input
                         type="checkbox"
                         id="ack"
-                        className="mt-1 h-5 w-5"
+                        className="mt-1 h-5 w-5 accent-brand"
                         checked={acknowledged}
                         onChange={(e) => setAcknowledged(e.target.checked)}
                     />
@@ -67,7 +69,7 @@ export default function PreStartScreen({ testCode, durationHours }: PreStartScre
                 <button
                     onClick={handleStart}
                     disabled={!acknowledged || loading}
-                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                    className="w-full bg-brand hover:bg-brand-dark text-white font-bold py-3 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed text-lg transition-colors"
                 >
                     {loading ? 'Starting...' : 'Start Test'}
                 </button>
