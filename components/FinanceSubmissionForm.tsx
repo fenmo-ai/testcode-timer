@@ -72,6 +72,19 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
         }
     };
 
+    if (isSuccess) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
+                <div className="bg-white shadow-lg rounded-lg px-8 py-10 max-w-lg w-full text-center border-t-4 border-brand">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/fenmo-logo.svg" alt="Fenmo" className="h-9 w-auto mx-auto mb-6" />
+                    <h1 className="text-3xl font-bold text-brand mb-3">Submission received</h1>
+                    <p className="text-gray-700 leading-relaxed">Thanks, all three deliverables are in. You can close this tab now. We&apos;ll be in touch about next steps.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
             <div className="bg-white shadow-lg rounded-lg px-8 pt-8 pb-8 mb-4 max-w-2xl w-full border-t-4 border-brand">
