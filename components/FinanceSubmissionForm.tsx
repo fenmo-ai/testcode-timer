@@ -119,7 +119,7 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
 
                     <div>
                         <label className="block text-gray-800 text-base font-semibold mb-1">
-                            1 &middot; Findings <span className="text-red-600">*</span>
+                            1 &middot; Validation Findings <span className="text-red-600">*</span>
                             <span className="ml-2 font-normal text-sm text-gray-400">doc, sheet, or PDF</span>
                         </label>
                         <FileUpload onFileSelect={setFindings} selectedFile={findings} accept={ANY_DOC}
@@ -128,8 +128,8 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
 
                     <div>
                         <label className="block text-gray-800 text-base font-semibold mb-1">
-                            2 &middot; Customer email <span className="text-red-600">*</span>
-                            <span className="ml-2 font-normal text-sm text-gray-400">the one you&apos;d actually send</span>
+                            2 &middot; Customer Communications <span className="text-red-600">*</span>
+                            <span className="ml-2 font-normal text-sm text-gray-400">what you&apos;d send, and to whom</span>
                         </label>
                         <FileUpload onFileSelect={setEmailFile} selectedFile={emailFile} accept={ANY_DOC}
                             hint=".pdf · .docx · .txt · .md" />
@@ -137,7 +137,7 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
 
                     <div>
                         <label className="block text-gray-800 text-base font-semibold mb-1">
-                            3 &middot; AI chat log <span className="text-red-600">*</span>
+                            3 &middot; AI Chat Log <span className="text-red-600">*</span>
                             <span className="ml-2 font-normal text-sm text-gray-400">exported as .md</span>
                         </label>
                         <FileUpload onFileSelect={setChatLog} selectedFile={chatLog} accept={MD_ONLY} hint=".md file" />
