@@ -1,8 +1,9 @@
-
 import { getTestCodeState, hasSubmitted } from '@/lib/testCodes';
 import PreStartScreen from '@/components/PreStartScreen';
 import RunningScreen from '@/components/RunningScreen';
 import SubmissionForm from '@/components/SubmissionForm';
+import FinanceRunningScreen from '@/components/FinanceRunningScreen';
+import FinanceSubmissionForm from '@/components/FinanceSubmissionForm';
 
 // We disable caching for this page to ensure fresh state on reload
 export const dynamic = 'force-dynamic';
@@ -19,26 +20,29 @@ export default async function TestPage({ params }: { params: Promise<{ testCode:
         );
     }
 
+    const isFinance = state.assignmentType === 'finance';
+
     // Phase 1: Not started
     if (!state.startTime) {
         return (
-            <PreStartScreen
-                testCode={state.testCode}
-                durationHours={state.durationHours}
-            />
+            <PreStartScreen testCode={state.testCode} durationHours={state.durationHours} />
         );
     }
 
     // Check time
     const start = new Date(state.startTime).getTime();
-    const now = Date.now();
     const durationMs = state.durationHours * 3600 * 1000;
-    const end = start + durationMs;
-    const remaining = end - now;
+    const remaining = start + durationMs - Date.now();
 
     // Phase 2: Running
     if (remaining > 0) {
-        return (
+        return isFinance ? (
+            <FinanceRunningScreen
+                testCode={state.testCode}
+                startTime={state.startTime}
+                durationHours={state.durationHours}
+            />
+        ) : (
             <RunningScreen
                 testCode={state.testCode}
                 startTime={state.startTime}
@@ -49,9 +53,7 @@ export default async function TestPage({ params }: { params: Promise<{ testCode:
     }
 
     // Phase 3: Ended
-    // Check submission
-    const submitted = await hasSubmitted(state.testCode);
-
+    const submitted = await hasSubmitted(state.testCode, state.assignmentType);
     if (submitted) {
         return (
             <main className="flex min-h-screen flex-col items-center justify-center p-24 text-gray-900 bg-gray-50">
@@ -64,7 +66,7 @@ export default async function TestPage({ params }: { params: Promise<{ testCode:
     }
 
     // Not submitted yet
-    return (
-        <SubmissionForm testCode={state.testCode} />
-    );
+    return isFinance
+        ? <FinanceSubmissionForm testCode={state.testCode} />
+        : <SubmissionForm testCode={state.testCode} />;
 }

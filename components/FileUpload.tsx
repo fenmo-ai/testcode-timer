@@ -8,9 +8,12 @@ interface FileUploadProps {
     selectedFile: File | null;
     error?: string;
     label?: string;
+    // Restrict accepted types (react-dropzone `accept` map). Omit to allow any file.
+    accept?: Record<string, string[]>;
+    hint?: string;
 }
 
-export default function FileUpload({ onFileSelect, selectedFile, error, label = "Drag & drop an image here, or click to select" }: FileUploadProps) {
+export default function FileUpload({ onFileSelect, selectedFile, error, accept, hint }: FileUploadProps) {
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles && acceptedFiles.length > 0) {
             onFileSelect(acceptedFiles[0]);
@@ -19,9 +22,7 @@ export default function FileUpload({ onFileSelect, selectedFile, error, label = 
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        accept: {
-            'image/*': ['.png', '.jpg', '.jpeg', '.gif']
-        },
+        accept,
         maxFiles: 1,
         multiple: false
     });
@@ -58,7 +59,7 @@ export default function FileUpload({ onFileSelect, selectedFile, error, label = 
                             <p className={`mb-2 text-sm ${isDragActive ? 'text-brand-dark' : 'text-gray-500'}`}>
                                 <span className="font-semibold">{isDragActive ? "Drop to upload" : "Click to upload"}</span> or drag and drop
                             </p>
-                            <p className="text-xs text-gray-400">PNG, JPG or JPEG (MAX. 1 file)</p>
+                            <p className="text-xs text-gray-400">{hint || 'Max. 1 file'}</p>
                         </>
                     )}
                 </div>

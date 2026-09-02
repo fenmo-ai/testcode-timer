@@ -62,3 +62,30 @@ export async function uploadFile(
 
     return response.data.webViewLink || '';
 }
+
+export interface DownloadedFile {
+    name: string;
+    mimeType: string;
+    buffer: Buffer;
+}
+
+export async function downloadFile(fileId: string): Promise<DownloadedFile> {
+    const drive = await getDriveClient();
+
+    const meta = await drive.files.get({
+        fileId,
+        fields: 'name, mimeType',
+        supportsAllDrives: true,
+    });
+
+    const media = await drive.files.get(
+        { fileId, alt: 'media', supportsAllDrives: true },
+        { responseType: 'arraybuffer' },
+    );
+
+    return {
+        name: meta.data.name || 'materials.zip',
+        mimeType: meta.data.mimeType || 'application/octet-stream',
+        buffer: Buffer.from(media.data as ArrayBuffer),
+    };
+}
