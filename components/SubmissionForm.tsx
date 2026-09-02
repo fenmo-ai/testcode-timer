@@ -209,6 +209,8 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
                                 onFileSelect={(selectedFile) => setFile(selectedFile)}
                                 selectedFile={file}
                                 error={!file ? "" : undefined} // Only show error if submitting or handled by state
+                                accept={{ 'image/*': ['.png', '.jpg', '.jpeg', '.gif'] }}
+                                hint="PNG, JPG or JPEG (MAX. 1 file)"
                             />
                         </div>
                     </div>

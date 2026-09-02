@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { hasSubmitted, getTestCodeState } from '@/lib/testCodes';
+import { hasSubmitted, getTestCodeState, getResponsesSheet } from '@/lib/testCodes';
 import { uploadFile } from '@/lib/googleDrive';
 import { appendRow } from '@/lib/googleSheets';
 
-const FORM_RESPONSES_SHEET = process.env.FORM_RESPONSES_SHEET_NAME || 'FormResponses';
+const PHONE_REGEX = /^(\+91[\-\s]?)?[6789]\d{9}$/;
 
 export async function POST(request: Request) {
     try {
@@ -12,53 +12,74 @@ export async function POST(request: Request) {
         const fullName = formData.get('fullName') as string;
         const email = formData.get('email') as string;
         const phone = formData.get('phone') as string;
-        const link1 = formData.get('link1') as string;
-        const link2 = formData.get('link2') as string;
-        const file = formData.get('file') as File | null;
 
-        if (!testCode || !file || !link1 || !fullName || !email || !phone) {
+        if (!testCode || !fullName || !email || !phone) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
-
-        // Basic phone validation on server side as well
-        const phoneRegex = /^(\+91[\-\s]?)?[6789]\d{9}$/;
-        if (!phoneRegex.test(phone)) {
+        if (!PHONE_REGEX.test(phone)) {
             return NextResponse.json({ error: 'Invalid phone number format' }, { status: 400 });
         }
 
-        // 1. Validation
         const state = await getTestCodeState(testCode);
         if (!state || state.status === 'not_invited') {
             return NextResponse.json({ error: 'Invalid TestCode' }, { status: 403 });
         }
 
-        const alreadySubmitted = await hasSubmitted(testCode);
-        if (alreadySubmitted) {
+        if (await hasSubmitted(testCode, state.assignmentType)) {
             return NextResponse.json({ error: 'Already submitted' }, { status: 409 });
         }
 
-        // 2. Upload File to Drive
-        // Convert File to Buffer
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        const fileName = `${testCode}_${file.name}`; // Prefix with TestCode for safety
-
-        // Upload
-        const driveLink = await uploadFile(fileName, file.type, buffer);
-
-        // 3. Append to Sheets
-        // Columns: Timestamp, Public GitHub Repo, Live Deployment, Screenshot (Drive Link), TestCode, Full Name, Email, Phone
+        const responsesSheet = getResponsesSheet(state.assignmentType);
         const now = new Date().toISOString();
-        const rowValues = [now, link1 || '', link2 || '', driveLink, testCode, fullName, email, phone];
-        console.log('[API] Prepared Row Values:', JSON.stringify(rowValues));
 
-        await appendRow(FORM_RESPONSES_SHEET, rowValues);
+        if (state.assignmentType === 'finance') {
+            const findings = formData.get('findings') as File | null;
+            const emailFile = formData.get('emailFile') as File | null;
+            const chatLog = formData.get('chatLog') as File | null;
+
+            if (!findings || !emailFile || !chatLog) {
+                return NextResponse.json({ error: 'All three deliverables are required' }, { status: 400 });
+            }
+
+            const [findingsLink, emailLink, chatLogLink] = await Promise.all([
+                uploadDeliverable(testCode, 'findings', findings),
+                uploadDeliverable(testCode, 'email', emailFile),
+                uploadDeliverable(testCode, 'chatlog', chatLog),
+            ]);
+
+            // FinanceResponses: Timestamp | TestCode | FullName | Email | Phone | FindingsLink | EmailLink | ChatLogLink
+            await appendRow(responsesSheet, [
+                now, testCode, fullName, email, phone, findingsLink, emailLink, chatLogLink,
+            ]);
+
+            return NextResponse.json({ status: 'ok' });
+        }
+
+        // SDE flow: GitHub repo link + optional deploy link + commit-history screenshot.
+        const link1 = formData.get('link1') as string;
+        const link2 = formData.get('link2') as string;
+        const file = formData.get('file') as File | null;
+
+        if (!file || !link1) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        }
+
+        const driveLink = await uploadDeliverable(testCode, file.name, file);
+
+        // FormResponses: Timestamp | GitHubRepo | Deploy | Screenshot | TestCode | FullName | Email | Phone
+        await appendRow(responsesSheet, [
+            now, link1 || '', link2 || '', driveLink, testCode, fullName, email, phone,
+        ]);
 
         return NextResponse.json({ status: 'ok' });
-
-    } catch (error: any) {
+    } catch (error) {
         console.error('Submission API Error:', error);
-        // Do not expose internal IDs or upstream error messages to the client
         return NextResponse.json({ error: 'Failed to process submission. Please contact support.' }, { status: 500 });
     }
+}
+
+async function uploadDeliverable(testCode: string, label: string, file: File): Promise<string> {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const fileName = `${testCode}_${label}_${file.name}`;
+    return uploadFile(fileName, file.type || 'application/octet-stream', buffer);
 }
