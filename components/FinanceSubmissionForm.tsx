@@ -33,9 +33,9 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const phoneRegex = /^(\+91[\-\s]?)?[6789]\d{9}$/;
+        const phoneRegex = /^[6-9]\d{9}$/;
         if (!phoneRegex.test(phone)) {
-            setError('Please enter a valid Indian phone number.');
+            setError('Please enter a valid 10-digit phone number.');
             return;
         }
         if (!findings || !emailFile || !chatLog) {
@@ -74,7 +74,9 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
-            <div className="bg-white shadow-lg rounded-lg px-8 pt-8 pb-8 mb-4 max-w-2xl w-full border-t-4 border-blue-600">
+            <div className="bg-white shadow-lg rounded-lg px-8 pt-8 pb-8 mb-4 max-w-2xl w-full border-t-4 border-brand">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/fenmo-logo.svg" alt="Fenmo" className="h-9 w-auto mb-6" />
                 <h1 className="text-3xl font-bold mb-2 text-gray-800">Submit your deliverables</h1>
                 <p className="text-gray-600 mb-6 border-b pb-4">
                     Upload all three items below. You can submit once, so make sure it&apos;s complete.
@@ -92,7 +94,7 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
                             <label className="block text-gray-800 text-base font-semibold mb-2" htmlFor="fullName">
                                 Full Name <span className="text-red-600">*</span>
                             </label>
-                            <input className="block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500"
+                            <input className="block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-brand"
                                 id="fullName" type="text" placeholder="Priya Nair"
                                 value={fullName} onChange={(e) => setFullName(e.target.value)} required />
                         </div>
@@ -100,8 +102,8 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
                             <label className="block text-gray-800 text-base font-semibold mb-2" htmlFor="phone">
                                 Phone Number <span className="text-red-600">*</span>
                             </label>
-                            <input className="block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500"
-                                id="phone" type="tel" placeholder="+91 9876543210"
+                            <input className="block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-brand"
+                                id="phone" type="tel" placeholder="9876543210" maxLength={10}
                                 value={phone} onChange={(e) => setPhone(e.target.value)} required />
                         </div>
                     </div>
@@ -110,7 +112,7 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
                         <label className="block text-gray-800 text-base font-semibold mb-2" htmlFor="email">
                             Email Address <span className="text-red-600">*</span>
                         </label>
-                        <input className="block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500"
+                        <input className="block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-brand"
                             id="email" type="email" placeholder="priya@example.com"
                             value={email} onChange={(e) => setEmail(e.target.value)} required />
                     </div>
@@ -147,7 +149,7 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
 
                     {error && <div className="p-4 text-sm text-red-800 rounded-lg bg-red-50 text-center" role="alert">{error}</div>}
 
-                    <button className="w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-4 px-4 rounded-lg shadow-md focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                    <button className="w-full bg-brand hover:bg-brand-dark text-white font-bold py-4 px-4 rounded-lg shadow-md focus:outline-none focus:ring-4 focus:ring-brand/30 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
                         type="submit" disabled={uploading || isSuccess}>
                         {uploading || isSuccess ? 'Submitting...' : 'Submit answers'}
                     </button>

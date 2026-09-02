@@ -23,10 +23,10 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Basic Phone Validation (Indian numbers)
-        const phoneRegex = /^(\+91[\-\s]?)?[6789]\d{9}$/;
+        // Phone must be exactly 10 digits (Indian mobile, without country code)
+        const phoneRegex = /^[6-9]\d{9}$/;
         if (!phoneRegex.test(phone)) {
-            setError('Please enter a valid Indian phone number.');
+            setError('Please enter a valid 10-digit mobile number.');
             return;
         }
 
@@ -70,10 +70,12 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4 font-sans">
-            <div className="bg-white shadow-lg rounded-lg px-8 pt-8 pb-8 mb-4 max-w-2xl w-full border-t-4 border-blue-600">
+            <div className="bg-white shadow-lg rounded-lg px-8 pt-8 pb-8 mb-4 max-w-2xl w-full border-t-4 border-brand">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/fenmo-logo.svg" alt="Fenmo" className="h-9 w-auto mb-6" />
                 <h1 className="text-3xl font-bold mb-6 text-gray-800 border-b pb-4">Assignment Submission Form</h1>
 
-                <div className="mb-8 text-gray-700 text-sm space-y-4 bg-blue-50 p-6 rounded-md border border-blue-100">
+                <div className="mb-8 text-gray-700 text-sm space-y-4 bg-brand-light p-6 rounded-md border border-brand/20">
                     <p className="font-medium">You are required to submit your solution for the assignment using this form. Please read all instructions carefully and ensure your submission is complete before sending.</p>
 
                     <div>
@@ -107,7 +109,7 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
                         </ol>
                     </div>
 
-                    <p className="text-xs text-gray-500 italic mt-4 pt-4 border-t border-blue-200">
+                    <p className="text-xs text-gray-500 italic mt-4 pt-4 border-t border-brand/20">
                         By submitting this form, you confirm that: The GitHub repository link, deployment link, and screenshot all correspond to the same project. The work is your own, and the commit history accurately reflects your development process.
                     </p>
                 </div>
@@ -131,7 +133,7 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
                                 Full Name <span className="text-red-600">*</span>
                             </label>
                             <input
-                                className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                                className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-brand transition-colors"
                                 id="fullName"
                                 type="text"
                                 placeholder="John Doe"
@@ -145,12 +147,15 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
                                 Phone Number <span className="text-red-600">*</span>
                             </label>
                             <input
-                                className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                                className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-brand transition-colors"
                                 id="phone"
                                 type="tel"
-                                placeholder="+91 9876543210"
+                                inputMode="numeric"
+                                maxLength={10}
+                                pattern="[6-9][0-9]{9}"
+                                placeholder="9876543210"
                                 value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
+                                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                                 required
                             />
                         </div>
@@ -161,7 +166,7 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
                             Email Address <span className="text-red-600">*</span>
                         </label>
                         <input
-                            className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                            className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-brand transition-colors"
                             id="email"
                             type="email"
                             placeholder="john@example.com"
@@ -176,7 +181,7 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
                             Public GitHub repository link <span className="text-red-600">*</span>
                         </label>
                         <input
-                            className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                            className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-brand transition-colors"
                             id="link1"
                             type="url"
                             placeholder="https://github.com/username/project"
@@ -191,7 +196,7 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
                             Live deployment link <span className="text-gray-400 font-normal text-sm">(Optional)</span>
                         </label>
                         <input
-                            className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 transition-colors"
+                            className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-brand transition-colors"
                             id="link2"
                             type="url"
                             placeholder="https://project.vercel.app"
@@ -218,7 +223,7 @@ export default function SubmissionForm({ testCode }: SubmissionFormProps) {
                     {error && <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 text-center" role="alert">{error}</div>}
 
                     <button
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg shadow-md focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                        className="w-full bg-brand hover:bg-brand-dark text-white font-bold py-4 px-4 rounded-lg shadow-md focus:outline-none focus:ring-4 focus:ring-brand/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-lg"
                         type="submit"
                         disabled={uploading || isSuccess}
                     >

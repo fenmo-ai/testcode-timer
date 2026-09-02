@@ -34,10 +34,14 @@ export default function FinanceRunningScreen({ testCode, startTime, durationHour
         <main className="min-h-screen bg-gray-50 text-gray-900">
             <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
                 <div className="max-w-6xl mx-auto px-5 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
-                    <Countdown startTime={startTime} durationHours={durationHours} onEnd={() => router.refresh()} />
+                    <div className="flex items-center gap-4">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src="/fenmo-logo.svg" alt="Fenmo" className="h-7 w-auto" />
+                        <Countdown startTime={startTime} durationHours={durationHours} onEnd={() => router.refresh()} />
+                    </div>
                     <button
                         onClick={() => { if (confirm('Go to the submission form? Your timer keeps running.')) setIsFinished(true); }}
-                        className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded text-sm"
+                        className="bg-brand hover:bg-brand-dark text-white font-bold py-2 px-4 rounded text-sm"
                     >
                         Submit deliverables →
                     </button>
@@ -47,7 +51,7 @@ export default function FinanceRunningScreen({ testCode, startTime, durationHour
             <div className="max-w-6xl mx-auto px-5 py-6">
                 <div className="flex items-center justify-between gap-4 flex-wrap mb-4">
                     <div>
-                        <p className="text-sm font-semibold text-blue-600 mb-1">Take-home · Finance Operations Fellow</p>
+                        <p className="text-sm font-semibold text-brand mb-1">Take-home · Finance Operations Fellow</p>
                         <h1 className="text-2xl md:text-3xl font-bold tracking-tight">The AI already ran the numbers. You decide if it&apos;s right.</h1>
                     </div>
                     <span className="text-sm font-medium border border-gray-300 bg-white rounded-md px-3 py-1.5">
@@ -82,7 +86,7 @@ export default function FinanceRunningScreen({ testCode, startTime, durationHour
                                         <th className="text-right font-semibold pb-2">Outstanding</th>
                                     </tr>
                                 </thead>
-                                <tbody className="font-mono text-blue-600">
+                                <tbody className="font-mono text-brand">
                                     {['Nova', 'Kalyan', 'Sterling'].map((c) => (
                                         <tr key={c} className="border-t border-gray-100">
                                             <td className="text-left py-2 font-sans font-semibold text-gray-900">{c}</td>
@@ -93,7 +97,7 @@ export default function FinanceRunningScreen({ testCode, startTime, durationHour
                                     ))}
                                 </tbody>
                             </table>
-                            <p className="mt-4 bg-blue-50 border border-blue-100 rounded-md px-3 py-2.5 text-sm text-blue-900">
+                            <p className="mt-4 bg-brand-light border border-brand/20 rounded-md px-3 py-2.5 text-sm text-brand-dark">
                                 <b>Then decide:</b> which of the AI&apos;s two queued emails should actually go out — and what you&apos;d change.
                             </p>
                             <ul className="mt-4 space-y-2.5">
@@ -103,7 +107,7 @@ export default function FinanceRunningScreen({ testCode, startTime, durationHour
                                     ['Your AI chat log (.md)', 'the full conversation (see “How to work”).'],
                                 ].map(([t, d], i) => (
                                     <li key={i} className="flex gap-3 items-start">
-                                        <span className="flex-none w-6 h-6 rounded-md bg-blue-600 text-white text-xs font-bold grid place-items-center mt-0.5">{i + 1}</span>
+                                        <span className="flex-none w-6 h-6 rounded-md bg-brand text-white text-xs font-bold grid place-items-center mt-0.5">{i + 1}</span>
                                         <span className="text-sm"><b className="text-gray-900">{t}</b> <span className="text-gray-500">— {d}</span></span>
                                     </li>
                                 ))}
@@ -121,12 +125,12 @@ export default function FinanceRunningScreen({ testCode, startTime, durationHour
                                 ].map(([name, tag], i) => (
                                     <div key={i} className="flex items-center gap-2 bg-gray-50 border border-gray-100 rounded px-3 py-2">
                                         <span className="font-mono text-[13px] text-gray-700">{name}</span>
-                                        <span className={`ml-auto text-[11px] font-semibold uppercase tracking-wide ${tag === 'AI' ? 'text-gray-500' : 'text-blue-600'}`}>{tag}</span>
+                                        <span className={`ml-auto text-[11px] font-semibold uppercase tracking-wide ${tag === 'AI' ? 'text-gray-500' : 'text-brand'}`}>{tag}</span>
                                     </div>
                                 ))}
                             </div>
                             <a href={materialsHref}
-                                className="block w-full text-center bg-blue-600 hover:bg-blue-800 text-white font-semibold py-3 rounded">
+                                className="block w-full text-center bg-brand hover:bg-brand-dark text-white font-semibold py-3 rounded">
                                 ↓ Download all materials (.zip)
                             </a>
                             <p className="text-xs text-gray-400 text-center mt-2">One zip — open the CSVs in Excel/Sheets, feed the rest to your AI.</p>
@@ -150,16 +154,16 @@ export default function FinanceRunningScreen({ testCode, startTime, durationHour
                             <div>
                                 <p className="font-bold text-gray-900 mb-2">2 · Give us your chat log as one .md file</p>
                                 <ol className="space-y-2.5 text-sm text-gray-700">
-                                    <li className="flex gap-3"><span className="flex-none w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold grid place-items-center mt-0.5">1</span><span><b>Open a brand-new chat</b> in your assistant and do <b>all</b> of your work in that single thread.</span></li>
-                                    <li className="flex gap-3"><span className="flex-none w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold grid place-items-center mt-0.5">2</span><span>When you&apos;re done, ask it: <code className="font-mono text-[12px] bg-gray-100 border border-gray-200 rounded px-1.5 py-0.5">Export our entire conversation so far as one complete Markdown file, verbatim.</code></span></li>
-                                    <li className="flex gap-3"><span className="flex-none w-5 h-5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold grid place-items-center mt-0.5">3</span><span>Save it as <code className="font-mono text-[12px] bg-gray-100 border border-gray-200 rounded px-1.5 py-0.5">chat-log.md</code> and upload it as deliverable 3.</span></li>
+                                    <li className="flex gap-3"><span className="flex-none w-5 h-5 rounded-full bg-brand-light text-brand-dark text-xs font-bold grid place-items-center mt-0.5">1</span><span><b>Open a brand-new chat</b> in your assistant and do <b>all</b> of your work in that single thread.</span></li>
+                                    <li className="flex gap-3"><span className="flex-none w-5 h-5 rounded-full bg-brand-light text-brand-dark text-xs font-bold grid place-items-center mt-0.5">2</span><span>When you&apos;re done, ask it: <code className="font-mono text-[12px] bg-gray-100 border border-gray-200 rounded px-1.5 py-0.5">Export our entire conversation so far as one complete Markdown file, verbatim.</code></span></li>
+                                    <li className="flex gap-3"><span className="flex-none w-5 h-5 rounded-full bg-brand-light text-brand-dark text-xs font-bold grid place-items-center mt-0.5">3</span><span>Save it as <code className="font-mono text-[12px] bg-gray-100 border border-gray-200 rounded px-1.5 py-0.5">chat-log.md</code> and upload it as deliverable 3.</span></li>
                                 </ol>
                             </div>
                         </div>
                         <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between gap-4 flex-wrap">
                             <p className="text-sm text-gray-600"><b className="text-gray-700">Budget ~2 hours — we mean it.</b> A tighter, sharper submission beats an exhaustive one.</p>
                             <button onClick={() => setIsFinished(true)}
-                                className="bg-blue-600 hover:bg-blue-800 text-white font-semibold text-sm py-2.5 px-5 rounded">
+                                className="bg-brand hover:bg-brand-dark text-white font-semibold text-sm py-2.5 px-5 rounded">
                                 Ready? Submit deliverables →
                             </button>
                         </div>

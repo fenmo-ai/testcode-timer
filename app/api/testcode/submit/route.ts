@@ -3,7 +3,8 @@ import { hasSubmitted, getTestCodeState, getResponsesSheet } from '@/lib/testCod
 import { uploadFile } from '@/lib/googleDrive';
 import { appendRow } from '@/lib/googleSheets';
 
-const PHONE_REGEX = /^(\+91[\-\s]?)?[6789]\d{9}$/;
+// Phone must be exactly 10 digits (Indian mobile, without country code)
+const PHONE_REGEX = /^[6-9]\d{9}$/;
 
 export async function POST(request: Request) {
     try {
