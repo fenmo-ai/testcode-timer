@@ -72,6 +72,19 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
         }
     };
 
+    if (isSuccess) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
+                <div className="bg-white shadow-lg rounded-lg px-8 py-10 max-w-lg w-full text-center border-t-4 border-brand">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/fenmo-logo.svg" alt="Fenmo" className="h-9 w-auto mx-auto mb-6" />
+                    <h1 className="text-3xl font-bold text-brand mb-3">Submission received</h1>
+                    <p className="text-gray-700 leading-relaxed">Thanks, all three deliverables are in. You can close this tab now. We&apos;ll be in touch about next steps.</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
             <div className="bg-white shadow-lg rounded-lg px-8 pt-8 pb-8 mb-4 max-w-2xl w-full border-t-4 border-brand">
@@ -119,7 +132,7 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
 
                     <div>
                         <label className="block text-gray-800 text-base font-semibold mb-1">
-                            1 &middot; Findings <span className="text-red-600">*</span>
+                            1 &middot; Validation Findings <span className="text-red-600">*</span>
                             <span className="ml-2 font-normal text-sm text-gray-400">doc, sheet, or PDF</span>
                         </label>
                         <FileUpload onFileSelect={setFindings} selectedFile={findings} accept={ANY_DOC}
@@ -128,8 +141,8 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
 
                     <div>
                         <label className="block text-gray-800 text-base font-semibold mb-1">
-                            2 &middot; Customer email <span className="text-red-600">*</span>
-                            <span className="ml-2 font-normal text-sm text-gray-400">the one you&apos;d actually send</span>
+                            2 &middot; Customer Communications <span className="text-red-600">*</span>
+                            <span className="ml-2 font-normal text-sm text-gray-400">what you&apos;d send, and to whom</span>
                         </label>
                         <FileUpload onFileSelect={setEmailFile} selectedFile={emailFile} accept={ANY_DOC}
                             hint=".pdf · .docx · .txt · .md" />
@@ -137,7 +150,7 @@ export default function FinanceSubmissionForm({ testCode }: FinanceSubmissionFor
 
                     <div>
                         <label className="block text-gray-800 text-base font-semibold mb-1">
-                            3 &middot; AI chat log <span className="text-red-600">*</span>
+                            3 &middot; AI Chat Log <span className="text-red-600">*</span>
                             <span className="ml-2 font-normal text-sm text-gray-400">exported as .md</span>
                         </label>
                         <FileUpload onFileSelect={setChatLog} selectedFile={chatLog} accept={MD_ONLY} hint=".md file" />
